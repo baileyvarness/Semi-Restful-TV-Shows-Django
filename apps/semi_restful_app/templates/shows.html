@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Read (All)</title>
+</head>
+<body>
+    <table style="border: 1px solid black; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid black;">ID</th>
+                <th style="border: 1px solid black;">Title</th>
+                <th style="border: 1px solid black;">Network</th>
+                <th style="border: 1px solid black;">Release Date</th>
+                <th style="border: 1px solid black;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for show in all_the_shows %}
+            <tr>
+                <td style="border: 1px solid black;">{{ show.id }}</td>
+                <td style="border: 1px solid black;">{{ show.title }}</td>
+                <td style="border: 1px solid black;">{{ show.network }}</td>
+                <td style="border: 1px solid black;">{{ show.release_date|date:"F t, o" }}</td>
+                <td><a href="/show_page/{{show.id}}">Show</a> | <a href="/shows/{{show.id}}/edit">Edit</a> | <a href="/delete/{{show.id}}">Delete</a></td>  
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
