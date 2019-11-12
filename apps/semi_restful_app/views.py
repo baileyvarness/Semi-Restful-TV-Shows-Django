@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from .models import *
+from django.contrib import messages
 
 def shows_new(request):
     context= {
@@ -9,7 +10,14 @@ def shows_new(request):
 
 def add_show(request):
     print("Someone added a show")
-    new_show = Shows.objects.create(title=request.POST['title'], network=request.POST['network'], release_date=request.POST['release_date'], description=request.POST['description'])
+    errors = Shows.objects.validator(request.POST)
+    print('errors', errors)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect("/shows/new")
+    else:
+        new_show = Shows.objects.create(title=request.POST['title'], network=request.POST['network'], release_date=request.POST['release_date'], description=request.POST['description'])
     return redirect(f"/show_page/{new_show.id}")
 
 def show_page(request, show_id):
@@ -33,12 +41,18 @@ def show_edit(request, show_id):
 
 def edit_show(request, show_id):
     print("Someone edited a show")
-    show = Shows.objects.get(id=show_id)
-    show.title=request.POST['title'] 
-    show.network=request.POST['network']
-    show.release_date=request.POST['release_date']
-    show.description=request.POST['description']
-    show.save()
+    errors = Shows.objects.validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect(f"/shows/{show_id}/edit")
+    else:
+        show = Shows.objects.get(id=show_id)
+        show.title=request.POST['title'] 
+        show.network=request.POST['network']
+        show.release_date=request.POST['release_date']
+        show.description=request.POST['description']
+        show.save()
     return redirect(f"/show_page/{show_id}")
 
 

@@ -9,6 +9,9 @@
 <body>
     <h1>Edit Show {{ show.id }}</h1> <a href="/shows">Go Back</a>
     <br>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
     <br>
     <form action="/edit_show/{{ show.id }}" method="POST">
         {% csrf_token %}
